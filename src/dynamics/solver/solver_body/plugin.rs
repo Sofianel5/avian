@@ -45,14 +45,14 @@ impl Plugin for SolverBodyPlugin {
         // Add a solver body for each dynamic and kinematic rigid body
         // when the associated rigid body is enabled or woken up.
         app.add_observer(
-            |trigger: On<Remove, RigidBodyDisabled>,
+            |trigger: On<Remove<RigidBodyDisabled>>,
              rb_query: Query<&RigidBody, Without<Sleeping>>,
              commands: Commands| {
                 add_solver_body::<Without<Sleeping>>(In(trigger.entity), rb_query, commands);
             },
         );
         app.add_observer(
-            |trigger: On<Remove, Disabled>,
+            |trigger: On<Remove<Disabled>>,
              rb_query: Query<
                 &RigidBody,
                 (
@@ -72,7 +72,7 @@ impl Plugin for SolverBodyPlugin {
             },
         );
         app.add_observer(
-            |trigger: On<Remove, Sleeping>,
+            |trigger: On<Remove<Sleeping>>,
              rb_query: Query<&RigidBody, Without<RigidBodyDisabled>>,
              commands: Commands| {
                 add_solver_body::<Without<RigidBodyDisabled>>(
@@ -85,14 +85,14 @@ impl Plugin for SolverBodyPlugin {
 
         // Remove solver bodies when their associated rigid body is removed.
         app.add_observer(
-            |trigger: On<Remove, RigidBody>, deferred_world: DeferredWorld| {
+            |trigger: On<Remove<RigidBody>>, deferred_world: DeferredWorld| {
                 remove_solver_body(In(trigger.entity), deferred_world);
             },
         );
 
         // Remove solver bodies when their associated rigid body is disabled or put to sleep.
         app.add_observer(
-            |trigger: On<Add, (Disabled, RigidBodyDisabled, Sleeping)>,
+            |trigger: On<Add<(Disabled, RigidBodyDisabled, Sleeping)>>,
              deferred_world: DeferredWorld| {
                 remove_solver_body(In(trigger.entity), deferred_world);
             },
@@ -130,7 +130,7 @@ impl Plugin for SolverBodyPlugin {
 }
 
 fn on_insert_rigid_body(
-    trigger: On<Insert, RigidBody>,
+    trigger: On<Insert<RigidBody>>,
     bodies: Query<(&RigidBody, Has<SolverBody>), RigidBodyActiveFilter>,
     mut commands: Commands,
 ) {

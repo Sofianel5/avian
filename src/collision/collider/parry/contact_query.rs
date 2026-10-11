@@ -230,7 +230,7 @@ pub fn contact_manifolds(
             return None;
         }
 
-        let subpos1 = manifold.subshape_pos1.unwrap_or_default();
+        let subpos1 = manifold.subshape_pos1().copied().unwrap_or_default();
         let local_normal: Vector = (subpos1.rotation * manifold.local_n1).normalize();
         let normal = rotation1 * local_normal;
 

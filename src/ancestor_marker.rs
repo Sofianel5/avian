@@ -25,7 +25,7 @@ impl<C: Component + TypePath> Plugin for AncestorMarkerPlugin<C> {
         // Add `AncestorMarker<C>` for the ancestors of colliders that are inserted as children,
         // until an ancestor that has other `AncestorMarker<C>` entities as children is encountered.
         app.add_observer(
-            |insert: On<Insert, (ChildOf, C)>,
+            |insert: On<Insert<(ChildOf, C)>>,
              mut commands: Commands,
              collider_query: Query<&C>,
              parent_query: Query<&ChildOf>,
@@ -47,7 +47,7 @@ impl<C: Component + TypePath> Plugin for AncestorMarkerPlugin<C> {
         // until an ancestor that has other `AncestorMarker<C>` entities as children is encountered.
         #[allow(clippy::type_complexity)]
         app.add_observer(
-            |insert: On<Discard, (ChildOf, C)>,
+            |insert: On<Discard<(ChildOf, C)>>,
             mut commands: Commands,
             collider_query: Query<&C>,
             child_query: Query<&Children>,
@@ -136,7 +136,7 @@ fn remove_ancestor_markers<C: Component>(
         // is also a marked ancestor or has `C`.
         if let Ok(children) = child_query.get(entity) {
             let keep_marker = ancestor_query
-                .iter_many(children)
+                .iter_many(children).matched()
                 .any(|(parent_child, _has_c)| parent_child != entity);
             if keep_marker {
                 return;
@@ -157,7 +157,7 @@ fn remove_ancestor_markers<C: Component>(
             // Keep the marker if `parent_entity` has a child that is a marked ancestor
             // or an entity that has `C`, but not the one that was removed.
             let keep_marker = ancestor_query
-                .iter_many(children)
+                .iter_many(children).matched()
                 .any(|(child, has_c)| child != previous_parent || (has_c && child != entity));
 
             if keep_marker {

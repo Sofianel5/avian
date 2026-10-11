@@ -2,7 +2,8 @@ use crate::{AdjustPrecision, FRAC_PI_2, PI, Scalar, TAU, Vector, math};
 
 use super::{AsF32, Collider, IntoCollider};
 use bevy::prelude::{Deref, DerefMut};
-use bevy_math::{bounding::Bounded2d, prelude::*};
+use bevy_math::prelude::*;
+use bevy_shape::{Bounded2d, prelude::*};
 use parry::{
     mass_properties::MassProperties,
     math::Pose,

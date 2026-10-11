@@ -8,6 +8,7 @@ use bevy::{
     math::DQuat,
     prelude::*,
 };
+use bevy_curve::{Curve, Ease, FunctionCurve, Interval};
 use derive_more::From;
 
 #[cfg(feature = "2d")]

@@ -17,6 +17,7 @@ mod double;
 pub use double::*;
 
 use bevy_math::{prelude::*, *};
+use bevy_shape::prelude::*;
 
 /// The active dimension.
 #[cfg(feature = "2d")]
